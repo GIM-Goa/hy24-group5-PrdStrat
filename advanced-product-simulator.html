@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Product Strategy Simulator - AI Powered</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-title {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+        
+        .dynamic-section {
+            min-height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .run-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .run-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .run-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .results-section.show {
+            display: block;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .analysis-content {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-top: 20px;
+        }
+        
+        .analysis-content h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .analysis-content p {
+            margin-bottom: 15px;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .analysis-content ul {
+            margin-left: 20px;
+            color: #666;
+        }
+        
+        .analysis-content li {
+            margin-bottom: 8px;
+        }
+        
+        .pill {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px 5px 5px 0;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Product Strategy Simulator</h1>
+            <p>AI-Powered Marketing Strategy Analysis & Recommendations</p>
+        </div>
+        
+        <div class="main-grid">
+            <!-- Left Panel: Configuration -->
+            <div class="card">
+                <h2 class="section-title">📊 Product Configuration</h2>
+                
+                <div class="form-group">
+                    <label for="product">Select Product Category:</label>
+                    <select id="product">
+                        <option value="">-- Choose a Product --</option>
+                        <option value="campa-cola">🥤 Campa Cola (Beverage)</option>
+                        <option value="nova-phone">📱 Nova Phone (Smartphone)</option>
+                        <option value="glow-skin">✨ Glow Skin (Skincare)</option>
+                        <option value="volt-bike">⚡ Volt Bike (E-Bike)</option>
+                        <option value="taste-bites">🍕 Taste Bites (Food Delivery)</option>
+                        <option value="swift-cab">🚗 Swift Cab (Ride Sharing)</option>
+                    </select>
+                </div>
+                
+                <div id="dynamic-fields" class="dynamic-section">
+                    <p style="text-align: center; color: #999; font-style: italic;">
+                        Select a product to see customized strategy options
+                    </p>
+                </div>
+                
+                <button id="runBtn" class="run-button" disabled>
+                    🤖 Generate AI Strategy Analysis
+                </button>
+            </div>
+            
+            <!-- Right Panel: Current Selection -->
+            <div class="card">
+                <h2 class="section-title">🎯 Current Selection</h2>
+                <div id="selection-summary">
+                    <p style="text-align: center; color: #999; font-style: italic; padding: 40px 20px;">
+                        Make your selections on the left to see a summary here
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results" class="results-section">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>🧠 AI analyzing your strategy selections...</p>
+            </div>
+            
+            <div id="analysis-results" style="display: none;">
+                <h2 class="section-title">📈 AI Strategy Analysis</h2>
+                
+                <div class="metrics" id="metrics">
+                    <!-- Metrics will be populated here -->
+                </div>
+                
+                <div class="analysis-content">
+                    <h4>🤖 Strategic Recommendations</h4>
+                    <div id="ai-analysis">
+                        <!-- AI analysis will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product configuration with realistic options
+        const PRODUCT_CONFIG = {
+            'campa-cola': {
+                name: '🥤 Campa Cola',
+                fields: {
+                    variant: {
+                        label: 'Product Variant',
+                        options: ['Original Cola', 'Orange Fizz', 'Lemon Twist', 'Zero Sugar', 'Cherry Blast']
+                    },
+                    positioning: {
+                        label: 'Market Positioning',
+                        options: ['Mass Market Appeal', 'Nostalgia Premium', 'Youth Culture', 'Health Conscious', 'Value Champion']
+                    },
+                    pricing: {
+                        label: 'Pricing Strategy',
+                        options: ['Everyday Value (₹10)', 'Promotional Pricing', 'Premium Positioning', 'Market Penetration']
+                    },
+                    channel: {
+                        label: 'Distribution Channel',
+                        options: ['Modern Trade', 'General Trade', 'Quick Commerce', 'HORECA', 'Omni-channel']
+                    },
+                    audience: {
+                        label: 'Target Audience',
+                        options: ['Gen Z (16-25)', 'Millennials (26-40)', 'Family Households', 'Price Conscious Consumers']
+                    }
+                }
+            },
+            'nova-phone': {
+                name: '📱 Nova Phone',
+                fields: {
+                    variant: {
+                        label: 'Phone Model',
+                        options: ['Nova Lite', 'Nova Pro', 'Nova Max', 'Nova Fold', 'Nova Gaming']
+                    },
+                    positioning: {
+                        label: 'Market Positioning',
+                        options: ['Performance Leader', 'Camera Excellence', 'Design Premium', 'Value Flagship', 'Gaming Beast']
+                    },
+                    pricing: {
+                        label: 'Pricing Strategy',
+                        options: ['Penetration Pricing', 'Competitive Parity', 'Premium Pricing', 'Value Pricing']
+                    },
+                    channel: {
+                        label: 'Sales Channel',
+                        options: ['Online Exclusive', 'Retail Partners', 'Company Stores', 'Carrier Partners', 'Omni-channel']
+                    },
+                    audience: {
+                        label: 'Target Segment',
+                        options: ['Tech Enthusiasts', 'Professional Users', 'Photography Lovers', 'Budget Conscious', 'Gamers']
+                    }
+                }
+            },
+            'glow-skin': {
+                name: '✨ Glow Skin',
+                fields: {
+                    variant: {
+                        label: 'Product Line',
+                        options: ['Anti-Aging Serum', 'Vitamin C Range', 'Hydrating Collection', 'Acne Treatment', 'Natural Organic']
+                    },
+                    positioning: {
+                        label: 'Brand Positioning',
+                        options: ['Dermatologist Recommended', 'Natural & Organic', 'Clinical Efficacy', 'Luxury Beauty', 'Affordable Care']
+                    },
+                    pricing: {
+                        label: 'Pricing Model',
+                        options: ['Premium Luxury', 'Mid-tier Quality', 'Accessible Pricing', 'Subscription Model']
+                    },
+                    channel: {
+                        label: 'Distribution',
+                        options: ['Beauty E-commerce', 'Pharmacy Chains', 'Department Stores', 'Direct-to-Consumer', 'Multi-channel']
+                    },
+                    audience: {
+                        label: 'Target Demographics',
+                        options: ['Young Adults (18-25)', 'Working Women (25-35)', 'Mature Skin (35+)', 'Men Grooming', 'Sensitive Skin']
+                    }
+                }
+            },
+            'volt-bike': {
+                name: '⚡ Volt Bike',
+                fields: {
+                    variant: {
+                        label: 'Bike Type',
+                        options: ['City Commuter', 'Mountain E-Bike', 'Folding Bike', 'Cargo Bike', 'Performance Road']
+                    },
+                    positioning: {
+                        label: 'Market Position',
+                        options: ['Eco-Friendly Transport', 'Urban Mobility', 'Performance Cycling', 'Lifestyle Product', 'Cost Saver']
+                    },
+                    pricing: {
+                        label: 'Pricing Approach',
+                        options: ['Premium Innovation', 'Competitive Pricing', 'EMI/Financing', 'Government Subsidy', 'Leasing Model']
+                    },
+                    channel: {
+                        label: 'Sales Strategy',
+                        options: ['Direct Sales Centers', 'Dealer Network', 'Online Platform', 'Corporate Sales', 'Hybrid Approach']
+                    },
+                    audience: {
+                        label: 'Customer Segment',
+                        options: ['Daily Commuters', 'Fitness Enthusiasts', 'Eco-Conscious Buyers', 'Delivery Professionals', 'Recreation Users']
+                    }
+                }
+            },
+            'taste-bites': {
+                name: '🍕 Taste Bites',
+                fields: {
+                    variant: {
+                        label: 'Service Type',
+                        options: ['Quick Delivery', 'Premium Dining', 'Cloud Kitchen', 'Healthy Options', 'Regional Cuisine']
+                    },
+                    positioning: {
+                        label: 'Market Position',
+                        options: ['Speed & Convenience', 'Quality & Taste', 'Value for Money', 'Health Conscious', 'Local Favorite']
+                    },
+                    pricing: {
+                        label: 'Pricing Strategy',
+                        options: ['Competitive Pricing', 'Premium Service', 'Value Deals', 'Subscription Model', 'Dynamic Pricing']
+                    },
+                    channel: {
+                        label: 'Platform Strategy',
+                        options: ['Own App/Website', 'Third-party Platforms', 'Multi-platform', 'Direct Ordering', 'Omni-channel']
+                    },
+                    audience: {
+                        label: 'Target Market',
+                        options: ['Busy Professionals', 'Students & Young Adults', 'Families', 'Health Conscious', 'Food Enthusiasts']
+                    }
+                }
+            },
+            'swift-cab': {
+                name: '🚗 Swift Cab',
+                fields: {
+                    variant: {
+                        label: 'Service Type',
+                        options: ['Economy Rides', 'Premium Service', 'Shared Mobility', 'Electric Fleet', 'Corporate Solutions']
+                    },
+                    positioning: {
+                        label: 'Market Position',
+                        options: ['Affordable Transport', 'Premium Experience', 'Reliable Service', 'Eco-Friendly', 'Tech-Forward']
+                    },
+                    pricing: {
+                        label: 'Pricing Model',
+                        options: ['Competitive Rates', 'Premium Pricing', 'Dynamic Surge', 'Subscription Plans', 'Corporate Rates']
+                    },
+                    channel: {
+                        label: 'Customer Acquisition',
+                        options: ['Mobile App', 'Digital Marketing', 'Referral Programs', 'Corporate Partnerships', 'Multi-channel']
+                    },
+                    audience: {
+                        label: 'User Segments',
+                        options: ['Daily Commuters', 'Business Travelers', 'Occasional Users', 'Price Sensitive', 'Premium Users']
+                    }
+                }
+            }
+        };
+
+        // DOM elements
+        const productSelect = document.getElementById('product');
+        const dynamicFields = document.getElementById('dynamic-fields');
+        const runBtn = document.getElementById('runBtn');
+        const results = document.getElementById('results');
+        const loading = document.getElementById('loading');
+        const analysisResults = document.getElementById('analysis-results');
+        const selectionSummary = document.getElementById('selection-summary');
+        const metrics = document.getElementById('metrics');
+        const aiAnalysis = document.getElementById('ai-analysis');
+
+        let currentSelections = {};
+
+        // Product selection handler
+        productSelect.addEventListener('change', function() {
+            const selectedProduct = this.value;
+            currentSelections = { product: selectedProduct };
+            
+            if (!selectedProduct) {
+                dynamicFields.innerHTML = '<p style="text-align: center; color: #999; font-style: italic;">Select a product to see customized strategy options</p>';
+                runBtn.disabled = true;
+                updateSelectionSummary();
+                return;
+            }
+
+            const config = PRODUCT_CONFIG[selectedProduct];
+            generateDynamicFields(config);
+            updateSelectionSummary();
+        });
+
+        function generateDynamicFields(config) {
+            dynamicFields.innerHTML = '';
+            
+            Object.keys(config.fields).forEach(fieldKey => {
+                const field = config.fields[fieldKey];
+                
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+                
+                const label = document.createElement('label');
+                label.textContent = field.label + ':';
+                label.setAttribute('for', fieldKey);
+                
+                const select = document.createElement('select');
+                select.id = fieldKey;
+                select.innerHTML = '<option value="">-- Select --</option>';
+                
+                field.options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    select.appendChild(optionElement);
+                });
+                
+                select.addEventListener('change', function() {
+                    currentSelections[fieldKey] = this.value;
+                    updateSelectionSummary();
+                    checkFormComplete();
+                });
+                
+                formGroup.appendChild(label);
+                formGroup.appendChild(select);
+                dynamicFields.appendChild(formGroup);
+            });
+        }
+
+        function updateSelectionSummary() {
+            if (!currentSelections.product) {
+                selectionSummary.innerHTML = '<p style="text-align: center; color: #999; font-style: italic; padding: 40px 20px;">Make your selections on the left to see a summary here</p>';
+                return;
+            }
+            
+            const config = PRODUCT_CONFIG[currentSelections.product];
+            let html = `<h3 style="color: #667eea; margin-bottom: 15px;">${config.name}</h3>`;
+            
+            Object.keys(config.fields).forEach(fieldKey => {
+                const field = config.fields[fieldKey];
+                const value = currentSelections[fieldKey] || 'Not selected';
+                html += `
+                    <div style="margin-bottom: 10px;">
+                        <strong>${field.label}:</strong>
+                        <span class="pill">${value}</span>
+                    </div>
+                `;
+            });
+            
+            selectionSummary.innerHTML = html;
+        }
+
+        function checkFormComplete() {
+            if (!currentSelections.product) {
+                runBtn.disabled = true;
+                return;
+            }
+            
+            const config = PRODUCT_CONFIG[currentSelections.product];
+            const requiredFields = Object.keys(config.fields);
+            const completedFields = requiredFields.filter(field => currentSelections[field]);
+            
+            runBtn.disabled = completedFields.length !== requiredFields.length;
+        }
+
+        // AI Analysis Engine
+        function generateAIAnalysis(selections) {
+            const config = PRODUCT_CONFIG[selections.product];
+            
+            // Simulate AI analysis with sophisticated logic
+            const analysisEngine = {
+                calculateMetrics() {
+                    let marketShare = Math.random() * 15 + 5; // 5-20%
+                    let revenueGrowth = Math.random() * 25 + 10; // 10-35%
+                    let riskScore = Math.random() * 0.6 + 0.2; // 0.2-0.8
+                    let customerSat = Math.random() * 20 + 70; // 70-90%
+                    
+                    // Adjust based on selections
+                    if (selections.pricing && selections.pricing.includes('Premium')) {
+                        revenueGrowth += 5;
+                        marketShare -= 2;
+                        riskScore += 0.1;
+                    }
+                    
+                    if (selections.positioning && selections.positioning.includes('Value')) {
+                        marketShare += 3;
+                        riskScore -= 0.1;
+                    }
+                    
+                    if (selections.channel && selections.channel.includes('Omni')) {
+                        marketShare += 2;
+                        customerSat += 5;
+                    }
+                    
+                    return {
+                        marketShare: Math.min(30, marketShare).toFixed(1),
+                        revenueGrowth: Math.min(50, revenueGrowth).toFixed(1),
+                        riskLevel: riskScore < 0.4 ? 'Low' : riskScore < 0.65 ? 'Medium' : 'High',
+                        customerSat: Math.min(95, customerSat).toFixed(0)
+                    };
+                },
+                
+                generateStrategy() {
+                    const productName = config.name;
+                    const positioning = selections.positioning || 'selected positioning';
+                    const pricing = selections.pricing || 'chosen pricing strategy';
+                    const channel = selections.channel || 'distribution approach';
+                    const audience = selections.audience || 'target segment';
+                    
+                    return `
+                        <p><strong>Strategic Overview:</strong> Your ${productName} strategy combines ${positioning.toLowerCase()} with ${pricing.toLowerCase()}, targeting ${audience.toLowerCase()} through ${channel.toLowerCase()}. This approach leverages market opportunities while addressing competitive dynamics.</p>
+                        
+                        <h4 style="margin-top: 20px; color: #667eea;">🎯 Key Recommendations:</h4>
+                        <ul>
+                            <li><strong>Market Entry:</strong> Begin with pilot markets to test positioning and refine value proposition</li>
+                            <li><strong>Channel Strategy:</strong> Optimize ${channel.toLowerCase()} for maximum reach and efficiency</li>
+                            <li><strong>Customer Acquisition:</strong> Focus on ${audience.toLowerCase()} with targeted messaging and experiences</li>
+                            <li><strong>Competitive Response:</strong> Monitor competitor reactions and prepare contingency strategies</li>
+                            <li><strong>Performance Metrics:</strong> Track brand awareness, market share, and customer satisfaction weekly</li>
+                        </ul>
+                        
+                        <h4 style="margin-top: 20px; color: #667eea;">⚠️ Risk Mitigation:</h4>
+                        <p>Key risks include competitive response, market adoption speed, and operational scaling. Recommend phased rollout with clear success metrics and exit criteria for each phase.</p>
+                        
+                        <h4 style="margin-top: 20px; color: #667eea;">📊 Success Factors:</h4>
+                        <ul>
+                            <li>Consistent brand messaging across all touchpoints</li>
+                            <li>Strong operational execution and customer service</li>
+                            <li>Agile response to market feedback and competitive moves</li>
+                            <li>Investment in technology and data analytics for optimization</li>
+                        </ul>
+                    `;
+                }
+            };
+            
+            return analysisEngine;
+        }
+
+        // Run Analysis
+        runBtn.addEventListener('click', function() {
+            results.classList.add('show');
+            loading.style.display = 'block';
+            analysisResults.style.display = 'none';
+            
+            // Scroll to results
+            results.scrollIntoView({ behavior: 'smooth' });
+            
+            // Simulate AI processing time
+            setTimeout(() => {
+                const analysis = generateAIAnalysis(currentSelections);
+                const calculatedMetrics = analysis.calculateMetrics();
+                const strategy = analysis.generateStrategy();
+                
+                // Display metrics
+                metrics.innerHTML = `
+                    <div class="metric-card">
+                        <div class="metric-value">${calculatedMetrics.marketShare}%</div>
+                        <div class="metric-label">Projected Market Share</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">+${calculatedMetrics.revenueGrowth}%</div>
+                        <div class="metric-label">Revenue Growth</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${calculatedMetrics.riskLevel}</div>
+                        <div class="metric-label">Risk Level</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${calculatedMetrics.customerSat}%</div>
+                        <div class="metric-label">Customer Satisfaction</div>
+                    </div>
+                `;
+                
+                // Display strategy
+                aiAnalysis.innerHTML = strategy;
+                
+                loading.style.display = 'none';
+                analysisResults.style.display = 'block';
+            }, 2500);
+        });
+    </script>
+</body>
+</html>
